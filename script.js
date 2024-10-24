@@ -130,6 +130,8 @@ EvilCircle.prototype.collisionDetect = function () {
                 // 从小球数组中删除这个小球
                 balls.splice(j, 1); // 从数组中删除碰撞的小球
                 j--; // 调整索引，确保检查到下一个小球
+                //更新恶魔环大小
+                this.size=this.size+1;
             }
         }
     }
@@ -164,6 +166,19 @@ for (let i = 0; i < 100; i++) {
     addBall();
 }
 
+let lastGenerationTime = 0;
+let interval = 1000; // 每秒生成一个小球，这里的时间单位是毫秒
+
+function generateBall() {
+  let currentTime = new Date().getTime();
+
+  if (currentTime - lastGenerationTime >= interval) {
+    // 生成小球的代码
+    addBall();
+    lastGenerationTime = currentTime;
+  }
+}
+
 // 主循环函数
 function loop() {
     ctx.fillStyle = "rgba(0, 0, 0, 0.25)"; // 设置背景色
@@ -182,6 +197,10 @@ function loop() {
     evilCircle.draw();
     evilCircle.update();
     evilCircle.collisionDetect();
+    
+
+    // 每帧调用 generateBall 函数
+    setInterval(generateBall, 16);
 
     requestAnimationFrame(loop); // 请求下一帧
 }
